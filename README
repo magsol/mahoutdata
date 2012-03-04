@@ -1,3 +1,4 @@
+<html>
 <h1>Scripts</h1>
 By: Shannon Quinn
 
@@ -24,3 +25,4 @@ I'll maintain a list here of the files in this repository and what they do.
 <li><strong>particle.js</strong>: An experiment with HTML5 canvas. You can create a simulation of particles which fly around the canvas with a certain amount of gravity. When a critical mass of particles balls up in a critical radius, they explode. It's pretty neat.</li>
 </ul>
 </p>
+</html>
