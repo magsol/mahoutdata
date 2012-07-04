@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plot
 import numpy as np
-import scipy.linalg
 import sklearn.cluster
 import sys
 
@@ -42,15 +41,36 @@ def main(raw, aff, k):
 	# Perform the eigen-decomposition. Eigenvalues and corresponding 
 	# eigenvectors are sorted from smallest to largest, but only the k
 	# largest are taken, so no need to reverse their order.
-	M = np.size(L, axis = 0)
-	eigvals, Y = scipy.linalg.eigh(L, eigvals = (M - 1 - k, M - 1))
+	# NOTE: SOMETHING STILL WRONG HERE.
+	eigvals, eigvects = np.linalg.eigh(L)
+	Y = np.zeros(shape = (np.size(L, axis = 0), k))
+	ordering = np.argsort(eigvals)[::-1]
+	numdims = 0
+	i = 0
+	while numdims < k:
+		eigval = eigvals[ordering[i]]
+		Y[:, numdims] = eigvects[:, ordering[i]]
+		numdims += 1
+		i += 1
 
 	# Perform K-means clustering on our embedded dataset Y.
 	kmeans = sklearn.cluster.KMeans(k = k)
 	labels = kmeans.fit_predict(Y)
 	rawdata = np.loadtxt(raw, delimiter = ',')
+
+	plot.figure(0)
+	plot.title('Manual Laplacian and K-Means')
 	for i in range(0, np.size(rawdata, axis = 0)):
 		plot.plot(rawdata[i, 0], rawdata[i, 1], COLORS[labels[i]])
+
+	plot.figure(1)
+	spectral = sklearn.cluster.SpectralClustering(k = k)
+	spectral.fit(A)
+	labels = spectral.labels_
+	plot.title('Scikit-Learn Spectral Clustering')
+	for i in range(0, np.size(rawdata, axis = 0)):
+		plot.plot(rawdata[i, 0], rawdata[i, 1], COLORS[labels[i]])
+
 	plot.show()
 
 if __name__ == '__main__':

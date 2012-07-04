@@ -244,7 +244,7 @@ def calculate_affinities(data, neighborhood, sigma):
 	affinities : array, shape (N, N)
 		Pairwise affinities for all data points.
 	'''
-	affinities = sklearn.metrics.pairwise.rbf_kernel(data, data, gamma = (1.0 / sigma))
+	affinities = sklearn.metrics.pairwise.rbf_kernel(data, data, gamma = (1.0 / (2 * sigma ** 2)))
 	distances = sklearn.metrics.pairwise.pairwise_distances(data)
 
 	# affinities and distances are the same dimensionality: (N, N)
