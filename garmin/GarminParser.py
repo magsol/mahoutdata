@@ -122,20 +122,19 @@ class ThreeRunsParser:
         '''
         yhat = np.zeros(np.size(y))
         for i in range(0, np.size(y)):
-            x = i
+            xi = i
             num = 0.0
             denom = 0.0
             for j in range(0, np.size(y)):
-                xi = j
-                yi = y[j]
-                k = self._kernel(np.abs(xi - x) / h)
-                num += yi * k
+                xj = j
+                k = self._kernel(np.abs(xi - xj) / h)
+                num += (y[j] * k)
                 denom += k
             yhat[i] = num / denom
         return yhat
 
     def _kernel(self, a):
-        return np.sqrt(2 * np.pi) * np.exp(-(a ** 2) / 2)
+        return (1 / np.sqrt(2 * np.pi)) * np.exp((-(a ** 2)) / 2)
 
 
 if __name__ == '__main__':
